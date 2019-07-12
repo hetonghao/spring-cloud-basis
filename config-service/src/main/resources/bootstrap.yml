@@ -1,0 +1,25 @@
+server:
+  port: 8805
+eureka:
+  client:
+    #是否将该服务注册到服务治理服务器上，非集群的注册中心可不开启 默认true
+    register-with-eureka: true
+    #表示是否将服务注册从服务治理服务器中同步已注册的服务列表到本地(只是服务提供者而不会是消费者可设为false) 默认true
+    #(注意：如果该服务商是turbine则必须开启，否则找不到服务提供者)
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8801/eureka
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/hetonghao/SpringCloudSamplesConfig.git
+          username: hetonghao
+          password: hth000406
+          #启动时加载配置
+          clone-on-start: true
+      #快速失败，连接不到配置服务器会直接报错
+      fail-fast: true

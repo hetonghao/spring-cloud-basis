@@ -1,0 +1,15 @@
+server:
+  port: 8803
+eureka:
+  instance:
+    hostname: eureka3
+  client:
+    #是否将该服务注册到服务治理服务器上，非集群的注册中心可不开启 默认true
+    register-with-eureka: true
+    #表示是否将服务注册从服务治理服务器中同步已注册的服务列表到本地(只是服务提供者而不会是消费者可设为false) 默认true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka:8801/eureka,http://eureka2:8802/eureka
+spring:
+  application:
+    name: eureka

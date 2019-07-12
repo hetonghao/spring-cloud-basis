@@ -1,0 +1,35 @@
+server:
+  port: 8800
+eureka:
+  client:
+    #是否将该服务注册到服务治理服务器上，非集群的注册中心可不开启 默认true
+    register-with-eureka: true
+    #表示是否将服务注册从服务治理服务器中同步已注册的服务列表到本地(只是服务提供者而不会是消费者可设为false) 默认true
+    #(注意：如果该服务商是turbine则必须开启，否则找不到服务提供者)
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8801/eureka
+spring:
+  application:
+    name: zuul-proxy
+management:
+  endpoints:
+    web:
+      exposure:
+        include: routes,filters
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000
+ribbon:
+  ReadTimeout: 8000
+  ConnectTimeout: 8000
+  eureka:
+    enabled: true
+zuul:
+  host:
+    socket-timeout-millis: 12000
+    connect-timeout-millis: 12000

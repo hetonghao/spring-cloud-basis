@@ -1,0 +1,12 @@
+server:
+  port: 8812
+spring:
+  application:
+    name: parking-service
+  cloud:
+    config:
+      uri: http://localhost:8805
+      profile: default
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
