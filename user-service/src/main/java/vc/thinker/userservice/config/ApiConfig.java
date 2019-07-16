@@ -1,4 +1,4 @@
-package vc.thinker.userservice;
+package vc.thinker.userservice.config;
 
 import com.fasterxml.classmate.TypeResolver;
 import io.swagger.annotations.Api;

@@ -1,6 +1,9 @@
 package vc.thinker.userservice.common.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -10,13 +13,16 @@ import java.util.Locale;
 /**
  * api response 基类
  *
- * @author: dengwei
- * @date: 2018年9月26日 上午11:52:41
+ * @author dengwei
+ * @date 2018年9月26日 上午11:52:41
  */
+@Data
 public abstract class AbstractResponse {
 
+    @ApiModelProperty(hidden = true)
     private MessageSource messageSource;
 
+    @ApiModelProperty(hidden = true)
     private Locale locale;
 
     private boolean success = true;
@@ -62,7 +68,8 @@ public abstract class AbstractResponse {
      * 设置错误信息
      *
      * @param error
-     * @param errorDescription
+     * @param errorMessageCode
+     * @param defaultMessage
      */
     public void setErrorInfo(String error, String errorMessageCode, String defaultMessage) {
         if (messageSource == null) {
@@ -77,7 +84,8 @@ public abstract class AbstractResponse {
      * 设置错误信息
      *
      * @param error
-     * @param errorDescription
+     * @param errorMessageCode
+     * @param defaultMessage
      */
     public void setErrorInfo(int error, String errorMessageCode, String defaultMessage) {
         setErrorInfo(String.valueOf(error), errorMessageCode, defaultMessage);
@@ -87,7 +95,9 @@ public abstract class AbstractResponse {
      * 设置错误信息
      *
      * @param error
-     * @param errorDescription
+     * @param errorMessageCode
+     * @param args
+     * @param defaultMessage
      */
     public void setErrorInfo(String error, String errorMessageCode, Object[] args, String defaultMessage) {
         this.success = false;
@@ -105,29 +115,5 @@ public abstract class AbstractResponse {
      */
     public void setErrorInfo(int error, String errorMessageCode, Object[] args, String defaultMessage) {
         setErrorInfo(String.valueOf(error), errorMessageCode, args, defaultMessage);
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getErrorDescription() {
-        return errorDescription;
-    }
-
-    public void setErrorDescription(String errorDescription) {
-        this.errorDescription = errorDescription;
     }
 }

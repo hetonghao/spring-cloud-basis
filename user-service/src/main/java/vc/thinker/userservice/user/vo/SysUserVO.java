@@ -21,8 +21,11 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "SysUser对象", description = "用户表")
+@ApiModel(value = "SysUserPageVO对象", description = "用户表")
 public class SysUserVO extends PageVO implements Serializable {
     @ApiModelProperty(value = "id")
     private Long id;
+
+    @ApiModelProperty("时间")
+    private LocalDateTime localDateTime;
 }

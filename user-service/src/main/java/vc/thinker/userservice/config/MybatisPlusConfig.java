@@ -1,4 +1,4 @@
-package vc.thinker.userservice;
+package vc.thinker.userservice.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
