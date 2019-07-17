@@ -1,4 +1,4 @@
-package vc.thinker.userservice.common;
+package vc.thinker.common;
 
 
 import com.fasterxml.jackson.core.JsonParser;

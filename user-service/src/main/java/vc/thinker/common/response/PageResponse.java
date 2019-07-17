@@ -1,4 +1,4 @@
-package vc.thinker.userservice.common.response;
+package vc.thinker.common.response;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package vc.thinker.userservice.common.response;
+package vc.thinker.common.response;
 
 import org.springframework.context.MessageSource;
 

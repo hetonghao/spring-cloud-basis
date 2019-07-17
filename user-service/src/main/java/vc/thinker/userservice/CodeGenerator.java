@@ -1,16 +1,17 @@
 package vc.thinker.userservice;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import vc.thinker.common.PageVO;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @Author: HeTongHao
@@ -74,29 +75,46 @@ public class CodeGenerator {
                 .setParent(PARENT_PACKAGE_NAME);
         mpg.setPackageInfo(pc);
 
-        // 自定义配置
+        // 如果模板引擎是 freemarker
+//        String templatePath = "/templates/pageVO.java.ftl";
+        // 如果模板引擎是 velocity
+        // String templatePath = "/templates/mapper.xml.vm";
+        List<FileOutConfig> focList = new ArrayList<>();
+        // 自定义配置会被优先输出
+        String voPackage = pc.getParent() + ".vo";
+        String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
+        String boPackage = pc.getParent() + ".bo";
+        String boPath = gc.getOutputDir() + "/" + boPackage.replaceAll("\\.", "/") + "/";
+        Class pageVOSuperClass = PageVO.class;
+        // 自定义属性注入
         InjectionConfig cfg = new InjectionConfig() {
             @Override
             public void initMap() {
-                // to do nothing
+                Map<String, Object> map = new HashMap<>();
+                map.put("voPackage", voPackage);
+                map.put("superPageVOClass", pageVOSuperClass);
+                map.put("boPackage", boPackage);
+                this.setMap(map);
             }
         };
-
-        // 如果模板引擎是 freemarker
-        String templatePath = "/templates/mapper.xml.ftl";
-        // 如果模板引擎是 velocity
-        // String templatePath = "/templates/mapper.xml.vm";
-        // 自定义输出配置
-        List<FileOutConfig> focList = new ArrayList<>();
-        // 自定义配置会被优先输出
-//        focList.add(new FileOutConfig(templatePath) {
-//            @Override
-//            public String outputFile(TableInfo tableInfo) {
-//                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-//                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
-//                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
-//            }
-//        });
+        focList.add(
+                //PageVO
+                new FileOutConfig("/templates/pageVO.java.ftl") {
+                    @Override
+                    public String outputFile(TableInfo tableInfo) {
+                        // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                        return voPath + tableInfo.getEntityName() + "PageVO" + StringPool.DOT_JAVA;
+                    }
+                });
+        focList.add(
+                //PageVO
+                new FileOutConfig("/templates/BO.java.ftl") {
+                    @Override
+                    public String outputFile(TableInfo tableInfo) {
+                        // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                        return boPath + tableInfo.getEntityName() + "BO" + StringPool.DOT_JAVA;
+                    }
+                });
         /*
         cfg.setFileCreate(new IFileCreate() {
             @Override

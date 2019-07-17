@@ -1,4 +1,4 @@
-package vc.thinker.userservice.common.request;
+package vc.thinker.common;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

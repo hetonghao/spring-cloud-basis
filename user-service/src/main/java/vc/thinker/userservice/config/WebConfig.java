@@ -9,8 +9,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import vc.thinker.userservice.common.LocalDateTimeDeserializer;
-import vc.thinker.userservice.common.LocalDateTimeSerializer;
+import vc.thinker.common.LocalDateTimeDeserializer;
+import vc.thinker.common.LocalDateTimeSerializer;
 
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;

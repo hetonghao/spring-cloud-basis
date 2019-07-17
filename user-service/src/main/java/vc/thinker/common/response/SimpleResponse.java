@@ -1,4 +1,4 @@
-package vc.thinker.userservice.common.response;
+package vc.thinker.common.response;
 
 import org.springframework.context.MessageSource;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author james
  *
  */
-public  class SimpleResponse extends AbstractResponse{
+public  class SimpleResponse extends AbstractResponse {
 	
 	public SimpleResponse(){
 		

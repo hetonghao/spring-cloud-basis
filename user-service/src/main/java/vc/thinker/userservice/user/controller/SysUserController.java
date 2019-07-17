@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import vc.thinker.userservice.common.response.PageResponse;
+import vc.thinker.common.response.PageResponse;
 import vc.thinker.userservice.user.entity.SysUser;
 import vc.thinker.userservice.user.service.ISysUserService;
 import vc.thinker.userservice.user.vo.SysUserVO;
