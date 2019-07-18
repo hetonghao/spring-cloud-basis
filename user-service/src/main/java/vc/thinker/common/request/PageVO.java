@@ -22,7 +22,7 @@ public class PageVO {
 
     @ApiModelProperty("页码")
     private Integer pageNumber;
-    @ApiModelProperty("每页数据")
+    @ApiModelProperty("每页数据条数")
     private Integer pageSize;
 
     /**

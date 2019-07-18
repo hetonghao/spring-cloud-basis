@@ -4,14 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import vc.thinker.common.response.SimpleResponse;
 import vc.thinker.userservice.pk.service.IOrderFormService;
 import vc.thinker.userservice.pk.entity.OrderForm;
 import vc.thinker.userservice.pk.vo.OrderFormPageVO;
 import vc.thinker.common.response.PageResponse;
+import vc.thinker.common.response.SingleResponse;
+import vc.thinker.common.response.SimpleResponse;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-
-import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,7 +20,7 @@ import javax.validation.Valid;
 
 /**
  * <p>
- * 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author HeTongHao
@@ -45,21 +44,22 @@ public class OrderFormController {
 
     @ApiOperation(value = "根据id查询")
     @GetMapping("{id}")
-    public OrderForm detail(@PathVariable("id") Long id) {
-        return targetService.getById(id);
+    public SingleResponse detail(@PathVariable("id") Long id) {
+        return new SingleResponse().setItem(targetService.getById(id));
     }
 
     @ApiOperation(value = "保存")
     @PatchMapping
-    public OrderForm save(@RequestBody OrderForm orderForm) {
+    public SingleResponse save(@RequestBody OrderForm orderForm) {
         targetService.save(orderForm);
-        return null;
+        return detail(orderForm.getId());
     }
 
     @ApiOperation(value = "删除")
     @DeleteMapping("{id}")
     public SimpleResponse delete(@PathVariable("id") Long id) {
-        targetService.removeById(id);
-        return new SimpleResponse();
+        SimpleResponse response = new SimpleResponse();
+        response.setSuccess(targetService.removeById(id));
+        return response;
     }
 }

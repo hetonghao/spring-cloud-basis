@@ -1,16 +1,20 @@
 package vc.thinker.common.response;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.context.MessageSource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 基础返回参数
+ * 列表返回参数
  *
  * @author HeTongHao
  * @since 2019-07-03
  */
+@Data
+@Accessors(chain = true)
 public class ListResponse<T> extends AbstractResponse {
 
     public ListResponse() {
@@ -21,12 +25,4 @@ public class ListResponse<T> extends AbstractResponse {
     }
 
     private List<T> items;
-
-    public List<T> getItems() {
-        return items;
-    }
-
-    public void setItems(List<T> items) {
-        this.items = items;
-    }
 }

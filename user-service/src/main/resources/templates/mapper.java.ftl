@@ -21,12 +21,12 @@ interface ${table.mapperName} : ${superMapperClass}<${entity}>
 <#else>
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
     /**
-    * 根据VO分页查询
-    *
-    * @param page
-    * @param vo
-    * @return
-    */
+     * 根据VO分页查询
+     *
+     * @param page
+     * @param vo
+     * @return
+     */
     List page(@Param("page") IPage page, @Param("vo") ${cfg.pageVOName} vo);
 }
 </#if>

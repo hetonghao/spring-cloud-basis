@@ -21,12 +21,12 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
 
     /**
-    * 根据VO分页查询
-    *
-    * @param page
-    * @param vo
-    * @return
-    */
+     * 根据VO分页查询
+     *
+     * @param page
+     * @param vo
+     * @return
+     */
     List page(IPage page, ${cfg.pageVOName} vo);
 }
 </#if>

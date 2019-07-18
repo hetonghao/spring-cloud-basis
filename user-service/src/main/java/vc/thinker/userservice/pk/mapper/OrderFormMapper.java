@@ -14,15 +14,15 @@ import java.util.List;
  * </p>
  *
  * @author HeTongHao
- * @since 2019-07-17
+ * @since 2019-07-18
  */
 public interface OrderFormMapper extends BaseMapper<OrderForm> {
     /**
-    * 根据VO分页查询
-    *
-    * @param page
-    * @param vo
-    * @return
-    */
+     * 根据VO分页查询
+     *
+     * @param page
+     * @param vo
+     * @return
+     */
     List page(@Param("page") IPage page, @Param("vo") OrderFormPageVO vo);
 }

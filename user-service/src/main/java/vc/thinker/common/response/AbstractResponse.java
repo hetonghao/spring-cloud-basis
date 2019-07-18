@@ -1,8 +1,8 @@
 package vc.thinker.common.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.context.MessageSource;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -16,6 +16,7 @@ import java.util.Locale;
  * @since 2019-07-03
  */
 @Data
+@Accessors(chain = true)
 public abstract class AbstractResponse {
 
     @ApiModelProperty(hidden = true)
@@ -24,9 +25,14 @@ public abstract class AbstractResponse {
     @ApiModelProperty(hidden = true)
     private Locale locale;
 
+    @ApiModelProperty("请求是否成功")
     private boolean success = true;
 
-    private String error;
+    @ApiModelProperty("自定义异常code")
+    private String code;
+
+    @ApiModelProperty("消息提示")
+    private String message;
 
     public AbstractResponse() {
     }
@@ -36,83 +42,80 @@ public abstract class AbstractResponse {
         this.locale = RequestContextUtils.getLocale(request);
     }
 
-    @JsonProperty(value = "error_description")
-    private String errorDescription;
-
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorDescription
+     * @param code    自定义异常code
+     * @param message 消息提示
      */
-    public void setErrorInfo(String error, String errorDescription) {
+    public void setErrorInfo(String code, String message) {
         this.success = false;
-        this.error = error;
-        this.errorDescription = errorDescription;
+        this.code = code;
+        this.message = message;
     }
 
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorDescription
+     * @param code    自定义异常code
+     * @param message 消息提示
      */
-    public void setErrorInfo(int error, String errorDescription) {
+    public void setErrorInfo(int code, String message) {
         this.success = false;
-        this.error = String.valueOf(error);
-        this.errorDescription = errorDescription;
+        this.code = String.valueOf(code);
+        this.message = message;
     }
 
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorMessageCode
-     * @param defaultMessage
+     * @param code           自定义异常code
+     * @param messageCode    用于国际化的消息编号
+     * @param defaultMessage 如果找不到对应的消息，返回默认的消息
      */
-    public void setErrorInfo(String error, String errorMessageCode, String defaultMessage) {
+    public void setErrorInfo(String code, String messageCode, String defaultMessage) {
         if (messageSource == null) {
             throw new RuntimeException("未初始化 messageSource 字段");
         }
         this.success = false;
-        this.error = error;
-        this.errorDescription = messageSource.getMessage(errorMessageCode, null, defaultMessage, locale);
+        this.code = code;
+        this.message = messageSource.getMessage(messageCode, null, defaultMessage, locale);
     }
 
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorMessageCode
-     * @param defaultMessage
+     * @param code           自定义异常code
+     * @param messageCode    用于国际化的消息编号
+     * @param defaultMessage 如果找不到对应的消息，返回默认的消息
      */
-    public void setErrorInfo(int error, String errorMessageCode, String defaultMessage) {
-        setErrorInfo(String.valueOf(error), errorMessageCode, defaultMessage);
+    public void setErrorInfo(int code, String messageCode, String defaultMessage) {
+        setErrorInfo(String.valueOf(code), messageCode, defaultMessage);
     }
 
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorMessageCode
-     * @param args
-     * @param defaultMessage
+     * @param code           自定义异常code
+     * @param messageCode    用于国际化的消息编号
+     * @param args           消息参数列表
+     * @param defaultMessage 如果找不到对应的消息，返回默认的消息
      */
-    public void setErrorInfo(String error, String errorMessageCode, Object[] args, String defaultMessage) {
+    public void setErrorInfo(String code, String messageCode, Object[] args, String defaultMessage) {
         this.success = false;
-        this.error = error;
-        this.errorDescription = messageSource.getMessage(errorMessageCode, args, defaultMessage, locale);
+        this.code = code;
+        this.message = messageSource.getMessage(messageCode, args, defaultMessage, locale);
     }
 
     /**
      * 设置错误信息
      *
-     * @param error
-     * @param errorMessageCode
-     * @param args
-     * @param defaultMessage
+     * @param code           自定义异常code
+     * @param messageCode    用于国际化的消息编号
+     * @param args           消息参数列表
+     * @param defaultMessage 如果找不到对应的消息，返回默认的消息
      */
-    public void setErrorInfo(int error, String errorMessageCode, Object[] args, String defaultMessage) {
-        setErrorInfo(String.valueOf(error), errorMessageCode, args, defaultMessage);
+    public void setErrorInfo(int code, String messageCode, Object[] args, String defaultMessage) {
+        setErrorInfo(String.valueOf(code), messageCode, args, defaultMessage);
     }
 }

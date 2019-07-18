@@ -8,9 +8,9 @@ import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${entity};
 import ${cfg.voPackage}.${cfg.pageVOName};
 import ${cfg.pageResponseClass.canonicalName};
+import ${cfg.singleResponseClass.canonicalName};
+import ${cfg.simpleResponseClass.canonicalName};
 import com.baomidou.mybatisplus.core.metadata.IPage;
-
-import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 <#if superControllerClassPackage??>
 import ${superControllerClassPackage};
 </#if>
+
 import javax.validation.Valid;
 
 /**
@@ -58,26 +59,25 @@ public class ${table.controllerName} {
         return new ${cfg.pageResponseClass.simpleName}().init(page);
     }
 
-
     @ApiOperation(value = "根据id查询")
     @GetMapping("{id}")
-    public ${entity} detail(@PathVariable("id") Long id) {
-        targetService.getById(id);
-        return null;
+    public ${cfg.singleResponseClass.simpleName} detail(@PathVariable("id") Long id) {
+        return new SingleResponse().setItem(targetService.getById(id));
     }
 
     @ApiOperation(value = "保存")
     @PatchMapping
-    public ${entity} save(@RequestBody ${entity} ${entity?uncap_first}) {
+    public ${cfg.singleResponseClass.simpleName} save(@RequestBody ${entity} ${entity?uncap_first}) {
         targetService.save(${entity?uncap_first});
-        return null;
+        return detail(${entity?uncap_first}.getId());
     }
 
     @ApiOperation(value = "删除")
     @DeleteMapping("{id}")
-    public String delete(@PathVariable("id") Long id) {
-        targetService.removeById(id);
-        return null;
+    public ${cfg.simpleResponseClass.simpleName} delete(@PathVariable("id") Long id) {
+        SimpleResponse response = new SimpleResponse();
+        response.setSuccess(targetService.removeById(id));
+        return response;
     }
 }
 </#if>

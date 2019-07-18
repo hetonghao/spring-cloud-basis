@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author HeTongHao
- * @since 2019-07-17
+ * @since 2019-07-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,6 +30,9 @@ public class OrderForm implements Serializable {
 
     @ApiModelProperty(value = "订单编号")
     private String orderCode;
+
+    @ApiModelProperty(value = "1:停车场订单 2: APP订单 3:标签订单 4:临停订单")
+    private Integer type;
 
     @ApiModelProperty(value = "订单状态 5:待支付,10停车中,20欠费，30为已结束 ，40已投诉 50 已开票")
     private Integer orderStatus;
@@ -123,6 +126,9 @@ public class OrderForm implements Serializable {
 
     @ApiModelProperty(value = "欠费金额")
     private String overPrice;
+
+    @ApiModelProperty(value = "预付费时长")
+    private Integer prePayMinute;
 
     @ApiModelProperty(value = "1:停车场 2:道路")
     private Integer parkType;

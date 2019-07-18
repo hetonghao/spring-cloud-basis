@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.google.common.collect.Maps;
 import vc.thinker.common.request.PageVO;
 import vc.thinker.common.response.PageResponse;
+import vc.thinker.common.response.SimpleResponse;
+import vc.thinker.common.response.SingleResponse;
 
 import java.util.*;
 
@@ -114,6 +116,8 @@ public class CodeGenerator {
                     }
                 });
         map.put("pageResponseClass", PageResponse.class);
+        map.put("singleResponseClass", SingleResponse.class);
+        map.put("simpleResponseClass", SimpleResponse.class);
         // 自定义属性注入
         InjectionConfig cfg = new InjectionConfig() {
             @Override
