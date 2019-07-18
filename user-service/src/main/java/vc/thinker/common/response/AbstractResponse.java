@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 /**
- * api response 基类
+ * 基础返回参数
  *
- * @author dengwei
- * @date 2018年9月26日 上午11:52:41
+ * @author HeTongHao
+ * @since 2019-07-03
  */
 @Data
 public abstract class AbstractResponse {

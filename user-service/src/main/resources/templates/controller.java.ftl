@@ -66,7 +66,7 @@ public class ${table.controllerName} {
         return null;
     }
 
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "保存")
     @PatchMapping
     public ${entity} save(@RequestBody ${entity} ${entity?uncap_first}) {
         targetService.save(${entity?uncap_first});

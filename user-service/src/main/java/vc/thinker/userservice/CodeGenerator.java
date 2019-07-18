@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.google.common.collect.Maps;
-import vc.thinker.common.PageVO;
+import vc.thinker.common.request.PageVO;
 import vc.thinker.common.response.PageResponse;
 
 import java.util.*;

@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import vc.thinker.common.PageVO;
+import vc.thinker.common.request.PageVO;
 
 /**
  * <p>

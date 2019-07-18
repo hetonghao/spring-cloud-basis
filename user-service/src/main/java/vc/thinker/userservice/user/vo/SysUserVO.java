@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import vc.thinker.common.PageVO;
+import vc.thinker.common.request.PageVO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

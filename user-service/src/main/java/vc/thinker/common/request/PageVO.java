@@ -1,4 +1,4 @@
-package vc.thinker.common;
+package vc.thinker.common.request;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,7 +28,7 @@ public class PageVO {
     /**
      * 生成分页组件
      *
-     * @return
+     * @return Mybatis-Plus分页插件
      */
     public IPage generatePage() {
         return new Page(pageNumber, pageSize);

@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.context.MessageSource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +38,14 @@ public class PageResponse<T> extends AbstractResponse {
 
     private Long totalPages;
 
-    private Date searchDate = new Date();
+    private LocalDateTime searchDate = LocalDateTime.now();
 
+    /**
+     * 将Mybatis-Plus分页插件的结果赋给PageResponse
+     *
+     * @param page
+     * @return this
+     */
     public PageResponse init(IPage page) {
         content = page.getRecords();
         number = page.getCurrent();

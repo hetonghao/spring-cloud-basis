@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vc.thinker.common.response.SimpleResponse;
 import vc.thinker.userservice.pk.service.IOrderFormService;
 import vc.thinker.userservice.pk.entity.OrderForm;
 import vc.thinker.userservice.pk.vo.OrderFormPageVO;
@@ -48,7 +49,7 @@ public class OrderFormController {
         return targetService.getById(id);
     }
 
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "保存")
     @PatchMapping
     public OrderForm save(@RequestBody OrderForm orderForm) {
         targetService.save(orderForm);
@@ -57,8 +58,8 @@ public class OrderFormController {
 
     @ApiOperation(value = "删除")
     @DeleteMapping("{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public SimpleResponse delete(@PathVariable("id") Long id) {
         targetService.removeById(id);
-        return null;
+        return new SimpleResponse();
     }
 }
