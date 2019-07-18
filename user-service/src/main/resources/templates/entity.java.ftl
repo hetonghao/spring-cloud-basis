@@ -93,7 +93,6 @@ public class ${entity} implements Serializable {
     private ${field.propertyType} ${field.propertyName};
 </#list>
 <#------------  END 字段循环遍历  ---------->
-
 <#if !entityLombokModel>
     <#list table.fields as field>
         <#if field.propertyType == "boolean">
@@ -117,7 +116,6 @@ public class ${entity} implements Serializable {
         }
     </#list>
 </#if>
-
 <#if entityColumnConstant>
     <#list table.fields as field>
         public static final String ${field.name?upper_case} = "${field.name}";

@@ -26,9 +26,9 @@ public class CodeGenerator {
      * JDBC相关配置
      */
     private static final String DRIVER = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://pgm-wz9006t1oky2042t3o.pg.rds.aliyuncs.com:3432/bull?useUnicode=true&characterEncoding=utf8";
-    private static final String USER_NAME = "bull";
-    private static final String PASSWORD = "vvAFXHrxKe672Rc*Y43T*Fv4wPkrxTiV";
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres?useUnicode=true&characterEncoding=utf8";
+    private static final String USER_NAME = "postgres";
+    private static final String PASSWORD = "Thinker@2019";
 
     /**
      * 生成在哪个包下
@@ -38,6 +38,11 @@ public class CodeGenerator {
      * 代码生成者
      */
     private static final String AUTHOR = "HeTongHao";
+
+    /**
+     * 是否初始化生成,设为false则不会覆盖除entity以外的代码
+     */
+    private static boolean isInitCodeGenerator = false;
 
     /**
      * <p>
@@ -63,7 +68,9 @@ public class CodeGenerator {
         AutoGenerator mpg = new AutoGenerator();
 
         // 全局配置
-        GlobalConfig gc = new GlobalConfig();
+        GlobalConfig gc = new GlobalConfig()
+                //文件覆盖
+                .setFileOverride(true);
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java")
                 .setAuthor(AUTHOR)
@@ -79,7 +86,38 @@ public class CodeGenerator {
                 .setParent(PARENT_PACKAGE_NAME)
                 .setXml("mapper");
         mpg.setPackageInfo(pc);
+        //自定义配置
+        InjectionConfig cfg = getInjectionConfig(gc, pc);
 
+        mpg.setCfg(cfg);
+
+        // 配置模板
+        mpg.setTemplate(initTemplateConfig(pc, gc));
+        // 策略配置
+        StrategyConfig strategy = new StrategyConfig()
+                .setNaming(NamingStrategy.underline_to_camel)
+                .setColumnNaming(NamingStrategy.underline_to_camel)
+                .setEntityLombokModel(true)
+                .setRestControllerStyle(true)
+                .setInclude(scanner("表名，多个英文逗号分割").split(","))
+//                .setSuperEntityColumns("id")
+                .setControllerMappingHyphenStyle(false)
+                .setTablePrefix(pc.getModuleName() + "_");
+        //strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
+        mpg.setStrategy(strategy);
+
+        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+        mpg.execute();
+    }
+
+    /**
+     * 自定义生成配置
+     *
+     * @param gc
+     * @param pc
+     * @return
+     */
+    private static InjectionConfig getInjectionConfig(GlobalConfig gc, PackageConfig pc) {
         // 如果模板引擎是 freemarker
 //        String templatePath = "/templates/pageVO.java.ftl";
         // 如果模板引擎是 velocity
@@ -87,34 +125,36 @@ public class CodeGenerator {
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
         Map<String, Object> map = Maps.newHashMap();
-        focList.add(
-                //PageVO
-                new FileOutConfig("/templates/pageVO.java.ftl") {
-                    @Override
-                    public String outputFile(TableInfo tableInfo) {
-                        // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                        String voPackage = pc.getParent() + ".vo";
-                        String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
-                        map.put("voPackage", voPackage);
-                        String className = tableInfo.getEntityName() + "PageVO";
-                        map.put("pageVOName", className);
-                        map.put("superPageVOClass", PageVO.class);
-                        return voPath + className + StringPool.DOT_JAVA;
-                    }
-                });
-        focList.add(
-                //PageVO
-                new FileOutConfig("/templates/BO.java.ftl") {
-                    @Override
-                    public String outputFile(TableInfo tableInfo) {
-                        String boPackage = pc.getParent() + ".bo";
-                        String boPath = gc.getOutputDir() + "/" + boPackage.replaceAll("\\.", "/") + "/";
-                        String className = tableInfo.getEntityName() + "BO";
-                        map.put("BOName", className);
-                        map.put("boPackage", boPackage);
-                        return boPath + className + StringPool.DOT_JAVA;
-                    }
-                });
+        if (isInitCodeGenerator) {
+            focList.add(
+                    //PageVO
+                    new FileOutConfig("/templates/pageVO.java.ftl") {
+                        @Override
+                        public String outputFile(TableInfo tableInfo) {
+                            // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                            String voPackage = pc.getParent() + ".vo";
+                            String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
+                            map.put("voPackage", voPackage);
+                            String className = tableInfo.getEntityName() + "PageVO";
+                            map.put("pageVOName", className);
+                            map.put("superPageVOClass", PageVO.class);
+                            return voPath + className + StringPool.DOT_JAVA;
+                        }
+                    });
+            focList.add(
+                    //PageVO
+                    new FileOutConfig("/templates/BO.java.ftl") {
+                        @Override
+                        public String outputFile(TableInfo tableInfo) {
+                            String boPackage = pc.getParent() + ".bo";
+                            String boPath = gc.getOutputDir() + "/" + boPackage.replaceAll("\\.", "/") + "/";
+                            String className = tableInfo.getEntityName() + "BO";
+                            map.put("BOName", className);
+                            map.put("boPackage", boPackage);
+                            return boPath + className + StringPool.DOT_JAVA;
+                        }
+                    });
+        }
         map.put("pageResponseClass", PageResponse.class);
         map.put("singleResponseClass", SingleResponse.class);
         map.put("simpleResponseClass", SimpleResponse.class);
@@ -136,33 +176,7 @@ public class CodeGenerator {
         });
         */
         cfg.setFileOutConfigList(focList);
-        mpg.setCfg(cfg);
-
-        // 配置模板
-        TemplateConfig templateConfig = new TemplateConfig();
-        // 配置自定义输出模板
-        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
-        //templateConfig.setController("templates/controller.java");
-        templateConfig.setEntity("templates/entity.java");
-        // templateConfig.setService();
-
-        //templateConfig.setXml(null);
-        mpg.setTemplate(templateConfig);
-        // 策略配置
-        StrategyConfig strategy = new StrategyConfig()
-                .setNaming(NamingStrategy.underline_to_camel)
-                .setColumnNaming(NamingStrategy.underline_to_camel)
-                .setEntityLombokModel(true)
-                .setRestControllerStyle(true)
-                .setInclude(scanner("表名，多个英文逗号分割").split(","))
-//                .setSuperEntityColumns("id")
-                .setControllerMappingHyphenStyle(false)
-                .setTablePrefix(pc.getModuleName() + "_");
-        //strategy.setSuperEntityClass("com.baomidou.ant.common.BaseEntity");
-        mpg.setStrategy(strategy);
-
-        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
-        mpg.execute();
+        return cfg;
     }
 
     /**
@@ -172,5 +186,35 @@ public class CodeGenerator {
      */
     private static DataSourceConfig dataSourceConfig() {
         return new DataSourceConfig().setDriverName(DRIVER).setUrl(URL).setUsername(USER_NAME).setPassword(PASSWORD);
+    }
+
+    /**
+     * 根据自己的需要，修改哪些包下面的 要覆盖还是不覆盖
+     *
+     * @param packageConfig
+     * @param globalConfig
+     * @return
+     */
+    private static TemplateConfig initTemplateConfig(PackageConfig packageConfig, GlobalConfig globalConfig) {
+        //配置自定义输出模板
+        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        TemplateConfig templateConfig = new TemplateConfig();
+//        List<String> baseDir = Arrays.asList(
+//                packageConfig.getEntity(),
+//                packageConfig.getController(),
+//                packageConfig.getService(),
+//                packageConfig.getServiceImpl(),
+//                packageConfig.getMapper(),
+//                packageConfig.getXml()
+//        );
+        //不是第一次生成，则不生成以下类
+        if (!isInitCodeGenerator) {
+            templateConfig.setController(null);
+            templateConfig.setService(null);
+            templateConfig.setServiceImpl(null);
+            templateConfig.setMapper(null);
+            templateConfig.setXml(null);
+        }
+        return templateConfig;
     }
 }
