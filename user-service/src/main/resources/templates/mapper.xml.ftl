@@ -36,4 +36,16 @@
     </sql>
 
 </#if>
+    <resultMap id="entity" type="${package.Entity}.${entity}"/>
+    <resultMap id="bo" extends="entity" type="${cfg.boPackage}.${cfg.BOName}">
+    </resultMap>
+    <select id="page" resultMap="bo">
+        select base.*
+        from ${table.name} as base
+        <where>
+            <if test="vo != null">
+
+            </if>
+        </where>
+    </select>
 </mapper>

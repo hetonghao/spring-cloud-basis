@@ -39,10 +39,9 @@ public class SysUserController {
     @ApiOperation(value = "查询分页数据")
     @PostMapping("page")
     public PageResponse page(@RequestBody @Valid SysUserVO vo) {
-        PageResponse resp = new PageResponse();
         IPage page = vo.generatePage();
         targetService.page(page, vo);
-        return resp.init(page);
+        return new PageResponse().init(page);
     }
 
 

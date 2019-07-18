@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${entity};
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${cfg.voPackage}.${cfg.pageVOName};
+import ${cfg.pageResponseClass.canonicalName};
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 <#if superControllerClassPackage??>
 import ${superControllerClassPackage};
 </#if>
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -47,40 +50,33 @@ public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} targetService;
 
-    /**
-     * 查询分页数据
-     */
-    @ApiOperation(value = "查询分页数据")
+    @ApiOperation(value = "分页查询")
     @PostMapping("page")
-    public Page page(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,@RequestParam(name = "pageSize", defaultValue = "20") int pageSize){
-        return null;
+    public ${cfg.pageResponseClass.simpleName} page(@RequestBody @Valid ${cfg.pageVOName} vo) {
+        IPage page = vo.generatePage();
+        targetService.page(page, vo);
+        return new ${cfg.pageResponseClass.simpleName}().init(page);
     }
 
 
-    /**
-     * 根据id查询
-     */
-    @ApiOperation(value = "根据id查询数据")
-    @GetMapping("detail/{id}")
-    public ${entity} detail(@PathVariable("id") Long id){
+    @ApiOperation(value = "根据id查询")
+    @GetMapping("{id}")
+    public ${entity} detail(@PathVariable("id") Long id) {
+        targetService.getById(id);
         return null;
     }
 
-    /**
-     * 新增
-     */
-    @ApiOperation(value = "新增数据")
-    @PatchMapping("save")
-    public ${entity} save(@RequestBody ${entity} ${entity?uncap_first}){
+    @ApiOperation(value = "新增")
+    @PatchMapping
+    public ${entity} save(@RequestBody ${entity} ${entity?uncap_first}) {
+        targetService.save(${entity?uncap_first});
         return null;
     }
 
-    /**
-     * 删除
-     */
-    @ApiOperation(value = "删除数据")
-    @DeleteMapping("delete")
-    public String delete(@RequestParam("ids") List<String> ids){
+    @ApiOperation(value = "删除")
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable("id") Long id) {
+        targetService.removeById(id);
         return null;
     }
 }

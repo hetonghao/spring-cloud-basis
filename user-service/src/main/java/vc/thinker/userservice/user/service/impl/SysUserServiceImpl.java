@@ -29,7 +29,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private IParkingService parkingService;
 
     @Override
-    public List<SysUserBO> page(IPage<SysUserBO> page, SysUserVO vo) {
+    public List page(IPage page, SysUserVO vo) {
         return baseMapper.page(page, vo);
     }
 

@@ -1,7 +1,6 @@
 package vc.thinker.userservice.user.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import vc.thinker.userservice.user.bo.SysUserBO;
 import vc.thinker.userservice.user.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import vc.thinker.userservice.user.vo.SysUserVO;
@@ -18,7 +17,6 @@ import java.util.List;
  */
 public interface ISysUserService extends IService<SysUser> {
 
-
     /**
      * 根据VO分页查询
      *
@@ -26,7 +24,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @param vo
      * @return
      */
-    List<SysUserBO> page(IPage<SysUserBO> page, SysUserVO vo);
+    List page(IPage page, SysUserVO vo);
 
     /**
      * 根据id查询

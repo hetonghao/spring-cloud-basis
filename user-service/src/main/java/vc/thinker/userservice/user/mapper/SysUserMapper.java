@@ -26,5 +26,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param vo
      * @return
      */
-    List<SysUserBO> page(@Param("page") IPage<SysUserBO> page, @Param("vo") SysUserVO vo);
+    List page(@Param("page") IPage page, @Param("vo") SysUserVO vo);
 }

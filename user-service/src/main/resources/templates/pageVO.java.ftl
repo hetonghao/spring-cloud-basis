@@ -30,11 +30,11 @@ import ${cfg.superPageVOClass.canonicalName};
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value = "${entity}PageVO对象", description="${table.comment!}")
+@ApiModel(value = "${entity}PageVO对象", description = "${table.comment!}")
 </#if>
 <#if cfg.superPageVOClass??>
-public class ${entity}PageVO extends ${cfg.superPageVOClass.simpleName} {
+public class ${cfg.pageVOName} extends ${cfg.superPageVOClass.simpleName} {
 <#else>
-public class ${entity}PageVO {
+public class ${cfg.pageVOName} {
 </#if>
 }

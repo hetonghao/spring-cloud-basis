@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.google.common.collect.Maps;
 import vc.thinker.common.PageVO;
+import vc.thinker.common.response.PageResponse;
 
 import java.util.*;
 
@@ -72,7 +74,8 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"))
-                .setParent(PARENT_PACKAGE_NAME);
+                .setParent(PARENT_PACKAGE_NAME)
+                .setXml("mapper");
         mpg.setPackageInfo(pc);
 
         // 如果模板引擎是 freemarker
@@ -81,29 +84,20 @@ public class CodeGenerator {
         // String templatePath = "/templates/mapper.xml.vm";
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
-        String voPackage = pc.getParent() + ".vo";
-        String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
-        String boPackage = pc.getParent() + ".bo";
-        String boPath = gc.getOutputDir() + "/" + boPackage.replaceAll("\\.", "/") + "/";
-        Class pageVOSuperClass = PageVO.class;
-        // 自定义属性注入
-        InjectionConfig cfg = new InjectionConfig() {
-            @Override
-            public void initMap() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("voPackage", voPackage);
-                map.put("superPageVOClass", pageVOSuperClass);
-                map.put("boPackage", boPackage);
-                this.setMap(map);
-            }
-        };
+        Map<String, Object> map = Maps.newHashMap();
         focList.add(
                 //PageVO
                 new FileOutConfig("/templates/pageVO.java.ftl") {
                     @Override
                     public String outputFile(TableInfo tableInfo) {
                         // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                        return voPath + tableInfo.getEntityName() + "PageVO" + StringPool.DOT_JAVA;
+                        String voPackage = pc.getParent() + ".vo";
+                        String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
+                        map.put("voPackage", voPackage);
+                        String className = tableInfo.getEntityName() + "PageVO";
+                        map.put("pageVOName", className);
+                        map.put("superPageVOClass", PageVO.class);
+                        return voPath + className + StringPool.DOT_JAVA;
                     }
                 });
         focList.add(
@@ -111,10 +105,22 @@ public class CodeGenerator {
                 new FileOutConfig("/templates/BO.java.ftl") {
                     @Override
                     public String outputFile(TableInfo tableInfo) {
-                        // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                        return boPath + tableInfo.getEntityName() + "BO" + StringPool.DOT_JAVA;
+                        String boPackage = pc.getParent() + ".bo";
+                        String boPath = gc.getOutputDir() + "/" + boPackage.replaceAll("\\.", "/") + "/";
+                        String className = tableInfo.getEntityName() + "BO";
+                        map.put("BOName", className);
+                        map.put("boPackage", boPackage);
+                        return boPath + className + StringPool.DOT_JAVA;
                     }
                 });
+        map.put("pageResponseClass", PageResponse.class);
+        // 自定义属性注入
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+                this.setMap(map);
+            }
+        };
         /*
         cfg.setFileCreate(new IFileCreate() {
             @Override
@@ -139,8 +145,8 @@ public class CodeGenerator {
         //templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
         // 策略配置
-        StrategyConfig strategy = new StrategyConfig();
-        strategy.setNaming(NamingStrategy.underline_to_camel)
+        StrategyConfig strategy = new StrategyConfig()
+                .setNaming(NamingStrategy.underline_to_camel)
                 .setColumnNaming(NamingStrategy.underline_to_camel)
                 .setEntityLombokModel(true)
                 .setRestControllerStyle(true)

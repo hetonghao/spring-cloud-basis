@@ -1,4 +1,4 @@
-package vc.thinker.userservice;
+package vc.thinker.userservice.interceptors;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.extern.slf4j.Slf4j;

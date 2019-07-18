@@ -28,7 +28,7 @@ import ${package.Entity}.${entity};
 @Accessors(chain = true)
 </#if>
 <#if swagger2>
-@ApiModel(value = "${entity}BO对象", description="${table.comment!}")
+@ApiModel(value = "${cfg.BOName}对象", description = "${table.comment!}")
 </#if>
-public class ${entity}BO extends ${entity} {
+public class ${cfg.BOName} extends ${entity} {
 }

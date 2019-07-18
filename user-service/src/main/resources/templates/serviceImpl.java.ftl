@@ -1,10 +1,14 @@
 package ${package.ServiceImpl};
 
 import ${package.Entity}.${entity};
+import ${cfg.voPackage}.${cfg.pageVOName};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
 import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import java.util.List;
 
 /**
  * <p>
@@ -22,5 +26,9 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 <#else>
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
 
+    @Override
+    public List page(IPage page, ${cfg.pageVOName} vo) {
+        return baseMapper.page(page, vo);
+    }
 }
 </#if>

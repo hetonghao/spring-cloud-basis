@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 文本形式的时间戳,反序列化成LocalDateTime
@@ -34,6 +35,10 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
 
     @Override
     public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        return Instant.ofEpochMilli(Long.valueOf(jsonParser.getText())).atZone(CURRENT_ZONE_OFFSET).toLocalDateTime();
+        String value = jsonParser.getText();
+        if (value.contains("-") || (value.contains(":"))) {
+            return LocalDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        }
+        return Instant.ofEpochMilli(Long.valueOf(value)).atZone(CURRENT_ZONE_OFFSET).toLocalDateTime();
     }
 }
