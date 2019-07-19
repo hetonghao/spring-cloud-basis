@@ -14,7 +14,7 @@ import ${cfg.superPageVOClass.canonicalName};
 
 /**
  * <p>
- * ${table.comment!}
+ * ${table.comment!} 分页对象
  * </p>
  *
  * @author ${author}

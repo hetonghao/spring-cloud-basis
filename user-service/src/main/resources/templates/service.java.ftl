@@ -37,5 +37,21 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @return
      */
     ${cfg.BOName} findDetail(${cfg.pkKeyType} id);
+
+    /**
+     * 保存,逻辑处理
+     *
+     * @param ${entity?uncap_first}
+     * @return
+     */
+    boolean saveData(${entity} ${entity?uncap_first});
+
+    /**
+     * 根据id删除,逻辑处理
+     *
+     * @param id
+     * @return
+     */
+    boolean delete(${cfg.pkKeyType} id);
 }
 </#if>

@@ -50,7 +50,7 @@ public class ${table.controllerName} {
     private ${table.serviceName} targetService;
 
     @PostMapping
-    @ApiOperation(value = "所有数据列表查询,传入pageNumber与pageSize可分页")
+    @ApiOperation(value = "列表", notes = "所有数据列表查询,传入pageNumber与pageSize可分页")
     public ${cfg.pageResponseClass.simpleName} page(@RequestBody @Valid ${cfg.pageVOName} vo) {
         IPage page = vo.generatePage();
         return new ${cfg.pageResponseClass.simpleName}().init(page).setData(targetService.page(page, vo));
@@ -63,9 +63,9 @@ public class ${table.controllerName} {
     }
 
     @PatchMapping
-    @ApiOperation(value = "保存")
-    public ${cfg.singleResponseClass.simpleName} save(@RequestBody ${entity} ${entity?uncap_first}) {
-        targetService.save(${entity?uncap_first});
+    @ApiOperation(value = "新增或更新", notes = "新增或更新，id is null新增数据，id not null更新数据")
+    public ${cfg.singleResponseClass.simpleName} saveOrUpdate(@RequestBody ${entity} ${entity?uncap_first}) {
+        targetService.saveData(${entity?uncap_first});
         return detail(${entity?uncap_first}.getId());
     }
 
@@ -73,7 +73,7 @@ public class ${table.controllerName} {
     @ApiOperation(value = "删除")
     public ${cfg.simpleResponseClass.simpleName} delete(@PathVariable("id") ${cfg.pkKeyType} id) {
         SimpleResponse response = new SimpleResponse();
-        response.setSuccess(targetService.removeById(id));
+        response.setSuccess(targetService.delete(id));
         return response;
     }
 }

@@ -50,7 +50,7 @@ public class CodeGenerator {
     /**
      * 是否初始化生成,设为false则不会覆盖除entity以外的代码
      */
-    private static boolean isInitCodeGenerator = false;
+    private static boolean isInitCodeGenerator = true;
 
     /**
      * 启动入口

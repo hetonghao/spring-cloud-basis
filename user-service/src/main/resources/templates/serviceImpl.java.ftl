@@ -9,6 +9,7 @@ import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -35,6 +36,16 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     @Override
     public ${cfg.BOName} findDetail(${cfg.pkKeyType} id) {
         return baseMapper.findDetail(id);
+    }
+
+    @Override
+    public boolean saveData(${entity} ${entity?uncap_first}) {
+        return super.saveOrUpdate(${entity?uncap_first});
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return super.removeById(id);
     }
 }
 </#if>
