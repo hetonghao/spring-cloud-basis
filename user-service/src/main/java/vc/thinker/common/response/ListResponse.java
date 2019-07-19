@@ -24,5 +24,5 @@ public class ListResponse<T> extends AbstractResponse {
         super(messageSource, request);
     }
 
-    private List<T> items;
+    private List<T> data;
 }

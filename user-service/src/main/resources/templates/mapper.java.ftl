@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
 import ${cfg.voPackage}.${cfg.pageVOName};
+import ${cfg.boPackage}.${cfg.BOName};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
@@ -28,5 +29,13 @@ public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
      * @return
      */
     List page(@Param("page") IPage page, @Param("vo") ${cfg.pageVOName} vo);
+
+    /**
+     * 根据id查询详情
+     *
+     * @param id
+     * @return
+     */
+    ${cfg.BOName} findDetail(${cfg.pkKeyType} id);
 }
 </#if>

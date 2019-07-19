@@ -3,6 +3,7 @@ package ${package.Service};
 import ${package.Entity}.${entity};
 import ${cfg.voPackage}.${cfg.pageVOName};
 import ${superServiceClassPackage};
+import ${cfg.boPackage}.${cfg.BOName};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.List;
@@ -28,5 +29,13 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @return
      */
     List page(IPage page, ${cfg.pageVOName} vo);
+
+    /**
+     * 根据id查询详情
+     *
+     * @param id
+     * @return
+     */
+    ${cfg.BOName} findDetail(${cfg.pkKeyType} id);
 }
 </#if>

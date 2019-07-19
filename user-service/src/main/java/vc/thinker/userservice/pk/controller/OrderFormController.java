@@ -45,7 +45,7 @@ public class OrderFormController {
     @ApiOperation(value = "根据id查询")
     @GetMapping("{id}")
     public SingleResponse detail(@PathVariable("id") Long id) {
-        return new SingleResponse().setItem(targetService.getById(id));
+        return new SingleResponse().setData(targetService.getById(id));
     }
 
     @ApiOperation(value = "保存")

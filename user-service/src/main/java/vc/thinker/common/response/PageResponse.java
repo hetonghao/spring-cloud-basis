@@ -2,11 +2,11 @@ package vc.thinker.common.response;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.context.MessageSource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
  * @since 2019-07-03
  */
 @Data
+@Accessors(chain = true)
 public class PageResponse<T> extends AbstractResponse {
     public PageResponse() {
     }
@@ -24,7 +25,7 @@ public class PageResponse<T> extends AbstractResponse {
         super(messageSource, request);
     }
 
-    private List<T> content;
+    private List<T> data;
 
     private Boolean first;
 
@@ -38,7 +39,7 @@ public class PageResponse<T> extends AbstractResponse {
 
     private Long totalPages;
 
-    private LocalDateTime searchDate = LocalDateTime.now();
+    private LocalDateTime queryTime = LocalDateTime.now();
 
     /**
      * 将Mybatis-Plus分页插件的结果赋给PageResponse
@@ -47,13 +48,15 @@ public class PageResponse<T> extends AbstractResponse {
      * @return this
      */
     public PageResponse init(IPage page) {
-        content = page.getRecords();
-        number = page.getCurrent();
-        size = page.getSize();
-        totalPages = page.getPages();
-        totalElements = page.getTotal();
-        first = number.equals(1L);
-        last = totalPages.equals(number);
+        if (page != null) {
+            data = page.getRecords();
+            number = page.getCurrent();
+            size = page.getSize();
+            totalPages = page.getPages();
+            totalElements = page.getTotal();
+            first = number.equals(1L);
+            last = totalPages.equals(number);
+        }
         return this;
     }
 }

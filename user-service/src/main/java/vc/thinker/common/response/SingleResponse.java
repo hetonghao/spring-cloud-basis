@@ -23,5 +23,5 @@ public class SingleResponse<T> extends AbstractResponse {
         super(messageSource, request);
     }
 
-    private T item;
+    private T data;
 }

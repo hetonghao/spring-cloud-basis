@@ -12,8 +12,6 @@ import ${cfg.singleResponseClass.canonicalName};
 import ${cfg.simpleResponseClass.canonicalName};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
 <#else>
@@ -39,7 +37,7 @@ import javax.validation.Valid;
 <#else>
 @Controller
 </#if>
-@RequestMapping("<#if package.ModuleName??>${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
+@RequestMapping("<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -51,30 +49,29 @@ public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} targetService;
 
-    @ApiOperation(value = "分页查询")
-    @PostMapping("page")
+    @PostMapping
+    @ApiOperation(value = "所有数据列表查询,传入pageNumber与pageSize可分页")
     public ${cfg.pageResponseClass.simpleName} page(@RequestBody @Valid ${cfg.pageVOName} vo) {
         IPage page = vo.generatePage();
-        targetService.page(page, vo);
-        return new ${cfg.pageResponseClass.simpleName}().init(page);
+        return new ${cfg.pageResponseClass.simpleName}().init(page).setData(targetService.page(page, vo));
     }
 
-    @ApiOperation(value = "根据id查询")
     @GetMapping("{id}")
-    public ${cfg.singleResponseClass.simpleName} detail(@PathVariable("id") Long id) {
-        return new SingleResponse().setItem(targetService.getById(id));
+    @ApiOperation(value = "根据id查询")
+    public ${cfg.singleResponseClass.simpleName} detail(@PathVariable("id") ${cfg.pkKeyType} id) {
+        return new SingleResponse().setData(targetService.findDetail(id));
     }
 
-    @ApiOperation(value = "保存")
     @PatchMapping
+    @ApiOperation(value = "保存")
     public ${cfg.singleResponseClass.simpleName} save(@RequestBody ${entity} ${entity?uncap_first}) {
         targetService.save(${entity?uncap_first});
         return detail(${entity?uncap_first}.getId());
     }
 
-    @ApiOperation(value = "删除")
     @DeleteMapping("{id}")
-    public ${cfg.simpleResponseClass.simpleName} delete(@PathVariable("id") Long id) {
+    @ApiOperation(value = "删除")
+    public ${cfg.simpleResponseClass.simpleName} delete(@PathVariable("id") ${cfg.pkKeyType} id) {
         SimpleResponse response = new SimpleResponse();
         response.setSuccess(targetService.removeById(id));
         return response;

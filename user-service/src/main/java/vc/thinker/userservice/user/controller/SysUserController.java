@@ -52,7 +52,7 @@ public class SysUserController {
     @ApiOperation(value = "根据id查询数据")
     @GetMapping("detail/{id}")
     public SingleResponse detail(@PathVariable("id") Long id) {
-        return new SingleResponse().setItem(targetService.findDetail(id));
+        return new SingleResponse().setData(targetService.findDetail(id));
     }
 
     /**

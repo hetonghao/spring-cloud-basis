@@ -1,12 +1,15 @@
 package vc.thinker.userservice;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.google.common.collect.Maps;
@@ -15,9 +18,14 @@ import vc.thinker.common.response.PageResponse;
 import vc.thinker.common.response.SimpleResponse;
 import vc.thinker.common.response.SingleResponse;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
+ * 业务代码生成配置
+ *
  * @Author: HeTongHao
  * @Date: 2019-06-23 17:02
  */
@@ -45,30 +53,18 @@ public class CodeGenerator {
     private static boolean isInitCodeGenerator = false;
 
     /**
-     * <p>
-     * 读取控制台内容
-     * </p>
+     * 启动入口
+     *
+     * @param args
      */
-    public static String scanner(String tip) {
-        Scanner scanner = new Scanner(System.in);
-        StringBuilder help = new StringBuilder();
-        help.append("请输入" + tip + "：");
-        System.out.println(help.toString());
-        if (scanner.hasNext()) {
-            String ipt = scanner.next();
-            if (StringUtils.isNotEmpty(ipt)) {
-                return ipt;
-            }
-        }
-        throw new MybatisPlusException("请输入正确的" + tip + "！");
-    }
-
     public static void main(String[] args) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig()
+                //id类型，数据库自增
+                .setIdType(IdType.AUTO)
                 //文件覆盖
                 .setFileOverride(true);
         String projectPath = System.getProperty("user.dir");
@@ -111,6 +107,26 @@ public class CodeGenerator {
     }
 
     /**
+     * <p>
+     * 读取控制台内容
+     * </p>
+     */
+    public static String scanner(String tip) {
+        Scanner scanner = new Scanner(System.in);
+        StringBuilder help = new StringBuilder();
+        help.append("请输入" + tip + "：");
+        System.out.println(help.toString());
+        if (scanner.hasNext()) {
+            String ipt = scanner.next();
+            if (StringUtils.isNotEmpty(ipt)) {
+                return ipt;
+            }
+        }
+        throw new MybatisPlusException("请输入正确的" + tip + "！");
+    }
+
+
+    /**
      * 自定义生成配置
      *
      * @param gc
@@ -131,6 +147,12 @@ public class CodeGenerator {
                     new FileOutConfig("/templates/pageVO.java.ftl") {
                         @Override
                         public String outputFile(TableInfo tableInfo) {
+                            for (TableField tableField : tableInfo.getFields()) {
+                                if (tableField.isKeyFlag()) {
+                                    map.put("pkKeyType", tableField.getPropertyType());
+                                }
+                            }
+                            map.put("pageResponseClass", PageResponse.class);
                             // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                             String voPackage = pc.getParent() + ".vo";
                             String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
@@ -185,7 +207,38 @@ public class CodeGenerator {
      * @return
      */
     private static DataSourceConfig dataSourceConfig() {
-        return new DataSourceConfig().setDriverName(DRIVER).setUrl(URL).setUsername(USER_NAME).setPassword(PASSWORD);
+        return new DataSourceConfig().setDriverName(DRIVER).setUrl(URL).setUsername(USER_NAME).setPassword(PASSWORD)
+                .setTypeConvert((globalConfig, fieldType) -> {
+                    String t = fieldType.toLowerCase();
+                    if (t.contains("char") || t.contains("text")) {
+                        return DbColumnType.STRING;
+                    } else if (t.contains("bigint")) {
+                        return DbColumnType.LONG;
+                    } else if (t.contains("int")) {
+                        return DbColumnType.INTEGER;
+                    } else if (t.contains("date") || t.contains("time") || t.contains("year")) {
+                        return DbColumnType.LOCAL_DATE_TIME;
+                    } else if (t.contains("text")) {
+                        return DbColumnType.STRING;
+                    } else if (t.contains("bit") || t.contains("bool")) {
+                        return DbColumnType.BOOLEAN;
+                    } else if (t.contains("decimal") || t.contains("numeric")) {
+                        return DbColumnType.BIG_DECIMAL;
+                    } else if (t.contains("clob")) {
+                        return DbColumnType.CLOB;
+                    } else if (t.contains("blob")) {
+                        return DbColumnType.BLOB;
+                    } else if (t.contains("binary")) {
+                        return DbColumnType.BYTE_ARRAY;
+                    } else if (t.contains("float")) {
+                        return DbColumnType.FLOAT;
+                    } else if (t.contains("double")) {
+                        return DbColumnType.DOUBLE;
+                    } else if (t.contains("json") || t.contains("enum")) {
+                        return DbColumnType.STRING;
+                    }
+                    return DbColumnType.STRING;
+                });
     }
 
     /**

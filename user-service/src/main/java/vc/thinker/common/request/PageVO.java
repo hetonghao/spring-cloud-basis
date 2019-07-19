@@ -15,11 +15,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class PageVO {
-    public PageVO() {
-        pageNumber = 1;
-        pageSize = 10;
-    }
-
     @ApiModelProperty("页码")
     private Integer pageNumber;
     @ApiModelProperty("每页数据条数")
@@ -31,6 +26,6 @@ public class PageVO {
      * @return Mybatis-Plus分页插件
      */
     public IPage generatePage() {
-        return new Page(pageNumber, pageSize);
+        return pageNumber == null || pageSize == null ? null : new Page(pageNumber, pageSize);
     }
 }

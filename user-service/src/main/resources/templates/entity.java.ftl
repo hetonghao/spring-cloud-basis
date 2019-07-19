@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 @TableName("${table.name}")
 </#if>
 <#if swagger2>
-@ApiModel(value = "${entity}对象", description="${table.comment!}")
+@ApiModel(value = "${entity}对象", description = "${table.comment!}")
 </#if>
 <#if superEntityClass??>
 public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
@@ -65,11 +65,11 @@ public class ${entity} implements Serializable {
     <#if field.keyFlag>
     <#-- 主键 -->
         <#if field.keyIdentityFlag>
-            @TableId(value = "${field.name}", type = IdType.AUTO)
+    @TableId(value = "${field.name}", type = IdType.AUTO)
         <#elseif idType??>
-            @TableId(value = "${field.name}", type = IdType.${idType})
+    @TableId(value = "${field.name}", type = IdType.${idType})
         <#elseif field.convert>
-            @TableId("${field.name}")
+    @TableId("${field.name}")
         </#if>
     <#-- 普通字段 -->
     <#elseif field.fill??>
