@@ -51,6 +51,6 @@
     <select id="findDetail" resultMap="bo">
         select base.*
         from ${table.name} as base
-        where id = ${r"#"}{id}
+        where base.id = ${r"#"}{id}
     </select>
 </mapper>

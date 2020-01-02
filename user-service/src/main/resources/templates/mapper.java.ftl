@@ -28,7 +28,7 @@ public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
      * @param vo
      * @return
      */
-    List page(@Param("page") IPage page, @Param("vo") ${cfg.pageVOName} vo);
+    List<${cfg.BOName}> page(@Param("page") IPage page, @Param("vo") ${cfg.pageVOName} vo);
 
     /**
      * 根据id查询详情
@@ -36,6 +36,6 @@ public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
      * @param id
      * @return
      */
-    ${cfg.BOName} findDetail(${cfg.pkKeyType} id);
+    ${cfg.BOName} findDetail(Long id);
 }
 </#if>

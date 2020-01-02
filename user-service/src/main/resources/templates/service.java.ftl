@@ -28,7 +28,7 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @param vo
      * @return
      */
-    List page(IPage page, ${cfg.pageVOName} vo);
+    List<${cfg.BOName}> page(IPage page, ${cfg.pageVOName} vo);
 
     /**
      * 根据id查询详情
@@ -36,8 +36,16 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @param id
      * @return
      */
-    ${cfg.BOName} findDetail(${cfg.pkKeyType} id);
-
+    ${cfg.BOName} findDetail(Long id);
+    
+    
+     /**
+     * 根据id删除,逻辑处理
+     *
+     * @param id
+     * @return
+     */
+    boolean delete(Long id);
     /**
      * 保存,逻辑处理
      *
@@ -46,12 +54,6 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      */
     boolean saveData(${entity} ${entity?uncap_first});
 
-    /**
-     * 根据id删除,逻辑处理
-     *
-     * @param id
-     * @return
-     */
-    boolean delete(${cfg.pkKeyType} id);
+   
 }
 </#if>

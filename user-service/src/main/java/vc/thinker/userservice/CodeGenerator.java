@@ -14,9 +14,6 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.google.common.collect.Maps;
 import vc.thinker.common.request.PageVO;
-import vc.thinker.common.response.PageResponse;
-import vc.thinker.common.response.SimpleResponse;
-import vc.thinker.common.response.SingleResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +31,7 @@ public class CodeGenerator {
      * JDBC相关配置
      */
     private static final String DRIVER = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres?useUnicode=true&characterEncoding=utf8";
+    private static final String URL = "jdbc:postgresql://localhost:5432/device?useUnicode=true&characterEncoding=utf8";
     private static final String USER_NAME = "postgres";
     private static final String PASSWORD = "Thinker@2019";
 
@@ -152,7 +149,6 @@ public class CodeGenerator {
                                     map.put("pkKeyType", tableField.getPropertyType());
                                 }
                             }
-                            map.put("pageResponseClass", PageResponse.class);
                             // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
                             String voPackage = pc.getParent() + ".vo";
                             String voPath = gc.getOutputDir() + "/" + voPackage.replaceAll("\\.", "/") + "/";
@@ -177,9 +173,6 @@ public class CodeGenerator {
                         }
                     });
         }
-        map.put("pageResponseClass", PageResponse.class);
-        map.put("singleResponseClass", SingleResponse.class);
-        map.put("simpleResponseClass", SimpleResponse.class);
         // 自定义属性注入
         InjectionConfig cfg = new InjectionConfig() {
             @Override

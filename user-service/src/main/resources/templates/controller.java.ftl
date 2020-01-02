@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${entity};
 import ${cfg.voPackage}.${cfg.pageVOName};
-import ${cfg.pageResponseClass.canonicalName};
-import ${cfg.singleResponseClass.canonicalName};
-import ${cfg.simpleResponseClass.canonicalName};
+import ${cfg.boPackage}.${cfg.BOName};
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 <#if restControllerStyle>
@@ -47,34 +45,33 @@ public class ${table.controllerName} extends ${superControllerClass} {
 public class ${table.controllerName} {
 </#if>
     @Autowired
-    private ${table.serviceName} targetService;
+    private ${table.serviceName} ${table.serviceName?substring(1)?uncap_first};
 
     @PostMapping
     @ApiOperation(value = "列表", notes = "所有数据列表查询,传入pageNumber与pageSize可分页")
-    public ${cfg.pageResponseClass.simpleName} page(@RequestBody @Valid ${cfg.pageVOName} vo) {
+    public IPage<${cfg.BOName}> page(@RequestBody @Valid ${cfg.pageVOName} vo) {
         IPage page = vo.generatePage();
-        return new ${cfg.pageResponseClass.simpleName}().init(page).setData(targetService.page(page, vo));
+        ${table.serviceName?substring(1)?uncap_first}.page(page, vo);
+        return page;
     }
 
     @GetMapping("{id}")
     @ApiOperation(value = "根据id查询")
-    public ${cfg.singleResponseClass.simpleName} detail(@PathVariable("id") ${cfg.pkKeyType} id) {
-        return new SingleResponse().setData(targetService.findDetail(id));
+    public ${cfg.BOName} detail(@PathVariable("id") Long id) {
+        return ${table.serviceName?substring(1)?uncap_first}.findDetail(id);
     }
 
     @PatchMapping
     @ApiOperation(value = "新增或更新", notes = "新增或更新，id is null新增数据，id not null更新数据")
-    public ${cfg.singleResponseClass.simpleName} saveOrUpdate(@RequestBody ${entity} ${entity?uncap_first}) {
-        targetService.saveData(${entity?uncap_first});
+    public ${cfg.BOName} saveOrUpdate(@RequestBody ${entity} ${entity?uncap_first}) {
+        ${table.serviceName?substring(1)?uncap_first}.saveData(${entity?uncap_first});
         return detail(${entity?uncap_first}.getId());
     }
 
     @DeleteMapping("{id}")
     @ApiOperation(value = "删除")
-    public ${cfg.simpleResponseClass.simpleName} delete(@PathVariable("id") ${cfg.pkKeyType} id) {
-        SimpleResponse response = new SimpleResponse();
-        response.setSuccess(targetService.delete(id));
-        return response;
+    public void delete(@PathVariable("id") Long id) {
+        ${table.serviceName?substring(1)?uncap_first}.delete(id);
     }
 }
 </#if>

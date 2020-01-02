@@ -29,15 +29,15 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
 
     @Override
-    public List page(IPage page, ${cfg.pageVOName} vo) {
+    public List<${cfg.BOName}> page(IPage page, ${cfg.pageVOName} vo) {
         return baseMapper.page(page, vo);
     }
-
+	
     @Override
-    public ${cfg.BOName} findDetail(${cfg.pkKeyType} id) {
+    public ${cfg.BOName} findDetail(Long id) {
         return baseMapper.findDetail(id);
     }
-
+	
     @Override
     public boolean saveData(${entity} ${entity?uncap_first}) {
         return super.saveOrUpdate(${entity?uncap_first});
